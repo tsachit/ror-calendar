@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
+import Scheduler from "./Scheduler";
 
 class Calendar extends Component {
   render() {
@@ -16,6 +17,7 @@ class Calendar extends Component {
             </div>
           </div>
         </div>
+        <Scheduler />
       </div>
     );
   }

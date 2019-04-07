@@ -1,8 +1,30 @@
-document.addEventListener("DOMContentLoaded", function() {
-  var calendarEl = document.getElementById("calendar");
+$(function() {
+  $("#datetimepickerStart").datetimepicker({
+    icons: {
+      time: "far fa-clock",
+      date: "fa fa-calendar",
+      up: "fa fa-arrow-up",
+      down: "fa fa-arrow-down"
+    }
+  });
+  $("#datetimepickerEnd").datetimepicker({
+    useCurrent: false,
+    icons: {
+      time: "far fa-clock",
+      date: "fa fa-calendar",
+      up: "fa fa-arrow-up",
+      down: "fa fa-arrow-down"
+    }
+  });
+  $("#datetimepickerStart").on("change.datetimepicker", function(e) {
+    $("#datetimepickerEnd").datetimepicker("minDate", e.date);
+  });
+  $("#datetimepickerEnd").on("change.datetimepicker", function(e) {
+    $("#datetimepickerStart").datetimepicker("maxDate", e.date);
+  });
 
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    plugins: ["interaction", "dayGrid", "timeGrid"],
+  $("#calendar").fullCalendar({
+    themeSystem: "bootstrap4",
     header: {
       left: "prev,next today",
       center: "title",
@@ -13,17 +35,20 @@ document.addEventListener("DOMContentLoaded", function() {
     selectable: true,
     selectMirror: true,
     select: function(arg) {
-      var title = prompt("Event Title:");
-      if (title) {
-        calendar.addEvent({
-          title: title,
-          start: arg.start,
-          end: arg.end,
-          allDay: arg.allDay
-        });
-      }
-      calendar.unselect();
+      $("#scheduler").modal("show");
     },
+    // select: function(arg) {
+    //   var title = prompt("Event Title:");
+    //   if (title) {
+    //     calendar.addEvent({
+    //       title: title,
+    //       start: arg.start,
+    //       end: arg.end,
+    //       allDay: arg.allDay
+    //     });
+    //   }
+    //   calendar.unselect();
+    // },
     editable: true,
     eventLimit: true, // allow "more" link when too many events
     events: [
@@ -83,6 +108,4 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     ]
   });
-
-  calendar.render();
 });
