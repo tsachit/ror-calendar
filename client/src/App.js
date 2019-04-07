@@ -13,7 +13,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Dashboard from "./components/dashboard/Dashboard";
+import Calendar from "./components/calendar/Calendar";
 import NotFound from "./components/not-found/NotFound";
 
 import "./App.css";
@@ -48,7 +48,7 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Switch>
-                <PrivateRoute exact path="/" component={Dashboard} />
+                <PrivateRoute exact path="/" component={Calendar} />
               </Switch>
               <Route exact path="/not-found" component={NotFound} />
             </div>

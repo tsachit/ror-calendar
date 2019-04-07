@@ -4,19 +4,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 
-class Dashboard extends Component {
+class Calendar extends Component {
   render() {
     const { user } = this.props.auth;
-
-    let dashboardContent = "";
-
     return (
-      <div className="dashboard">
+      <div className="calendar">
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="display-4">Dashboard</h1>
-              {dashboardContent}
+              <div id="calendar" />
             </div>
           </div>
         </div>
@@ -25,7 +21,7 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.propTypes = {
+Calendar.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
@@ -36,4 +32,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {}
-)(Dashboard);
+)(Calendar);
