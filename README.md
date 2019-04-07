@@ -12,9 +12,9 @@ Bundler version 1.17.2  <br />
 
 1. App User 
     - As an app user, one should be able to 
-      - [ ] signup using email(or phone) and password.
+      - [X] signup using email(or phone) and password.
       - [ ] verify account through email(or phone).
-      - [ ] login using is email, password.
+      - [X] login using is email, password.
 
 2. Schedule
     - As an app user, one should be able to 
