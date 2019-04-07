@@ -1,4 +1,4 @@
-# Calendar-ROR
+# Calendar App
 This is a calendar app created with Ruby on Rails and React JS
 
 
