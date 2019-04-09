@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, param: :email, :except => [:create]
       post '/auth/login', to: 'users#login'
       post '/auth/register', to: 'users#register'
+      resources :schedules
     end
   end
   get '/*a', to: 'application#not_found'
