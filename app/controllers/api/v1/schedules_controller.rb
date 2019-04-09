@@ -1,5 +1,17 @@
 class Api::V1::SchedulesController < ApplicationController
   before_action :authorize_request
+  before_action :get_schedule, only: [:show, :update, :destroy]
+
+  # GET /schedules
+  def index
+    @schedules = Schedule.all
+    render json: @schedules, status: :success
+  end
+
+  # GET /schedules/:id
+  def show
+    render json: @schedule, status: :ok
+  end
 
   # POST /schedules
   def create
@@ -13,10 +25,32 @@ class Api::V1::SchedulesController < ApplicationController
     end
   end
 
+  # PUT /schedules/:id
+  def update
+    if(@schedule.update(schedule_params))
+      render json: @schedule, status: :ok
+    else 
+      validation_error(@schedule)
+    end
+  end
+
+  # DELETE /schedules/:id
+  def destroy
+    if(@schedule.destroy)
+      render json: {success: true}, status: :ok
+    else 
+      validation_error(@schedule)
+    end
+  end
+
   private
 
   def schedule_params
     # whitelist params
     params.permit(:title, :description, :starts_at, :ends_at)
+  end
+
+  def get_schedule
+    @schedule = Schedule.find(params[:id])
   end
 end
