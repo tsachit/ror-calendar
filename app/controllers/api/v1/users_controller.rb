@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApplicationController
       render json: login_param_errors, status: :unauthorized
       return
     end
-    @user = User.find_by_email(params[:email])
+    @user = User.where(email: params[:email]).first
 
     if @user
       if @user.authenticate(params[:password])
