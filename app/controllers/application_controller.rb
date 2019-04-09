@@ -26,9 +26,9 @@ class ApplicationController < ActionController::API
 
   def validation_error(resource)
     errors = {}
-    @user.errors.each do |attribute, full_messages|
-      message = @user.errors[attribute][0]
-      errors[attribute] = @user.errors.full_message(attribute, message)
+    resource.errors.each do |attribute, full_messages|
+      message = resource.errors[attribute][0]
+      errors[attribute] = resource.errors.full_message(attribute, message)
     end
     render status: :bad_request, json: errors
   end
