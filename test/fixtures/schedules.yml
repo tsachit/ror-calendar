@@ -3,13 +3,13 @@
 one:
   title: MyString
   description: MyText
-  started_at: 2019-04-09 20:54:12
-  ended_at: 2019-04-09 20:54:12
+  starts_at: 2019-04-09 20:54:12
+  ends_at: 2019-04-09 20:54:12
   user: one
 
 two:
   title: MyString
   description: MyText
-  started_at: 2019-04-09 20:54:12
-  ended_at: 2019-04-09 20:54:12
+  starts_at: 2019-04-09 20:54:12
+  ends_at: 2019-04-09 20:54:12
   user: two

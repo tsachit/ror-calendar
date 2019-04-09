@@ -3,8 +3,8 @@ class CreateSchedules < ActiveRecord::Migration[5.2]
     create_table :schedules do |t|
       t.string :title, null: false
       t.text :description
-      t.datetime :started_at, null: false
-      t.datetime :ended_at, null: false
+      t.datetime :starts_at, null: false
+      t.datetime :ends_at, null: false
       t.references :user, foreign_key: true
 
       t.timestamps
