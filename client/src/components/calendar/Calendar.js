@@ -19,7 +19,8 @@ class Calendar extends Component {
   constructor() {
     super();
     this.state = {
-      showScheduleCreator: false
+      showScheduleCreator: false,
+      selectedDate: new Date()
     };
   }
 
@@ -34,11 +35,14 @@ class Calendar extends Component {
   // };
 
   handleDateClick = arg => {
-    this.setState({ showScheduleCreator: true });
+    this.setState({
+      showScheduleCreator: true,
+      selectedDate: new Date(arg.date)
+    });
   };
 
   render() {
-    const { showScheduleCreator } = this.state;
+    const { showScheduleCreator, selectedDate } = this.state;
     return (
       <div className="calendar">
         <div className="container">
@@ -62,7 +66,10 @@ class Calendar extends Component {
             </div>
           </div>
         </div>
-        <Scheduler showScheduleCreator={showScheduleCreator} />
+        <Scheduler
+          showScheduleCreator={showScheduleCreator}
+          selectedDate={selectedDate}
+        />
       </div>
     );
   }
@@ -73,7 +80,8 @@ class Calendar extends Component {
 // };
 
 const mapStateToProps = state => ({
-  showScheduleCreator: state.showScheduleCreator
+  showScheduleCreator: state.showScheduleCreator,
+  selectedDate: state.selectedDate
 });
 
 export default connect(
