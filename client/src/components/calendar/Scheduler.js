@@ -16,8 +16,6 @@ class Scheduler extends Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
-    console.log(new Date(props.selectedDate));
-
     this.state = {
       showScheduleCreator: props.showScheduleCreator,
       title: "",
@@ -31,7 +29,6 @@ class Scheduler extends Component {
   }
 
   handleDateChange = ({ startDate, endDate }) => {
-    console.log(this.state);
     startDate = startDate || this.state.startDateTime;
     endDate = endDate || this.state.endDateTime;
 
@@ -40,7 +37,6 @@ class Scheduler extends Component {
     }
 
     this.setState({ startDateTime: startDate, endDateTime: endDate });
-    console.log(this.state);
   };
 
   handleDateChangeStart = startDate => this.handleDateChange({ startDate });
@@ -68,7 +64,7 @@ class Scheduler extends Component {
       endDateTime: this.state.endDateTime
     };
 
-    console.log("============================", newSchedule);
+    this.props.addEvent(newSchedule);
   }
 
   componentWillReceiveProps(nextProps) {
