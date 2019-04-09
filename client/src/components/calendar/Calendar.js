@@ -38,8 +38,8 @@ class Calendar extends Component {
     calendarEvents.push({
       // creates a new array
       title: newSchedule.title,
-      start: newSchedule.startDateTime,
-      end: newSchedule.endDateTime
+      start: newSchedule.starts_at,
+      end: newSchedule.ends_at
     });
     this.setState({ calendarEvents, showScheduleCreator: false });
   };

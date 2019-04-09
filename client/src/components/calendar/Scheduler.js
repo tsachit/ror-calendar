@@ -19,8 +19,8 @@ class Scheduler extends Component {
     this.state = {
       showScheduleCreator: props.showScheduleCreator,
       title: "",
-      startDateTime: props.selectedDate,
-      endDateTime: props.selectedDate,
+      starts_at: props.selectedDate,
+      ends_at: props.selectedDate,
       errors: {}
     };
 
@@ -29,14 +29,14 @@ class Scheduler extends Component {
   }
 
   handleDateChange = ({ startDate, endDate }) => {
-    startDate = startDate || this.state.startDateTime;
-    endDate = endDate || this.state.endDateTime;
+    startDate = startDate || this.state.starts_at;
+    endDate = endDate || this.state.ends_at;
 
     if (isAfter(startDate, endDate)) {
       endDate = startDate;
     }
 
-    this.setState({ startDateTime: startDate, endDateTime: endDate });
+    this.setState({ starts_at: startDate, ends_at: endDate });
   };
 
   handleDateChangeStart = startDate => this.handleDateChange({ startDate });
@@ -60,8 +60,8 @@ class Scheduler extends Component {
 
     const newSchedule = {
       title: this.state.title,
-      startDateTime: this.state.startDateTime,
-      endDateTime: this.state.endDateTime
+      starts_at: this.state.starts_at,
+      ends_at: this.state.ends_at
     };
 
     this.props.addEvent(newSchedule);
@@ -70,18 +70,13 @@ class Scheduler extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       showScheduleCreator: nextProps.showScheduleCreator,
-      startDateTime: nextProps.selectedDate,
-      endDateTime: nextProps.selectedDate
+      starts_at: nextProps.selectedDate,
+      ends_at: nextProps.selectedDate
     });
   }
 
   render() {
-    const {
-      showScheduleCreator,
-      startDateTime,
-      endDateTime,
-      errors
-    } = this.state;
+    const { showScheduleCreator, starts_at, ends_at, errors } = this.state;
     return (
       <Modal show={showScheduleCreator} onHide={this.handleClose}>
         <form onSubmit={this.onSubmit} noValidate>
@@ -103,28 +98,32 @@ class Scheduler extends Component {
               <div className="col-6">
                 <div className="form-group">
                   <DatePicker
-                    selected={startDateTime}
+                    name="starts_at"
+                    selected={starts_at}
                     selectsStart
                     timeInputLabel="Time:"
                     dateFormat="MM/dd/yyyy h:mm aa"
                     showTimeInput
-                    startDate={startDateTime}
-                    endDate={endDateTime}
+                    startDate={starts_at}
+                    endDate={ends_at}
                     onChange={this.handleDateChangeStart}
+                    error={errors.starts_at}
                   />
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <DatePicker
-                    selected={endDateTime}
+                    name="ends_at"
+                    selected={ends_at}
                     selectsStart
                     timeInputLabel="Time:"
                     dateFormat="MM/dd/yyyy h:mm aa"
                     showTimeInput
-                    startDate={startDateTime}
-                    endDate={endDateTime}
+                    startDate={starts_at}
+                    endDate={ends_at}
                     onChange={this.handleDateChangeEnd}
+                    error={ends_at}
                   />
                 </div>
               </div>
