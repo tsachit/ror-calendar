@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 2019_04_09_152403) do
 
   create_table "invitations", force: :cascade do |t|
     t.string "email", null: false
-    t.integer "status", default: 0, null: false, comment: "0 => Pending, 1 => Accepted, 2 => Rejected"
-    t.integer "is_notified", default: 0, null: false, comment: "0 => Not Notified, 1 => Notified"
+    t.integer "status", limit: 2, default: 0, null: false, comment: "0 => Pending, 1 => Accepted, 2 => Rejected"
+    t.integer "is_notified", limit: 2, default: 0, null: false, comment: "0 => Not Notified, 1 => Notified"
     t.string "invite_token"
     t.bigint "schedule_id"
     t.datetime "created_at", null: false
