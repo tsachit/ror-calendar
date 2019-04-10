@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import Scheduler from "./Scheduler";
 import ViewSchedule from "./ViewSchedule";
-import { getSchedules } from "../../actions/calendarActions";
+import { getSchedules, getSchedule } from "../../actions/calendarActions";
 import moment from "moment";
 import { filterSingleScheduleDates } from "../../utils/helper";
 
@@ -45,6 +45,8 @@ class Calendar extends Component {
       showScheduleViewer: true,
       selectedSchedule: arg.event.id
     });
+
+    this.props.getSchedule(arg.event.id);
   };
 
   addEvent = schedule => {
@@ -122,7 +124,8 @@ class Calendar extends Component {
 }
 
 Calendar.propTypes = {
-  getSchedules: PropTypes.func.isRequired
+  getSchedules: PropTypes.func.isRequired,
+  getSchedule: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -131,5 +134,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getSchedules }
+  { getSchedules, getSchedule }
 )(Calendar);

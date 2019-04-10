@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import { getSchedule } from "../../actions/calendarActions";
+import { scheduleDate } from "../../utils/helper";
 
 class ViewSchedule extends Component {
   constructor(props) {
@@ -32,23 +33,37 @@ class ViewSchedule extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.showScheduleViewer) {
-      this.setState({ showScheduleViewer: nextProps.showScheduleViewer  });
+      this.setState({ showScheduleViewer: nextProps.showScheduleViewer });
     }
     if (nextProps.selectedSchedule) {
-      this.setState({ selectedSchedule: nextProps.selectedSchedule  });
+      this.setState({ selectedSchedule: nextProps.selectedSchedule });
     }
   }
 
   render() {
     const { showScheduleViewer } = this.state;
+    const { schedule } = this.props.calendar;
     return (
       <Modal show={showScheduleViewer} onHide={this.handleClose}>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Schedule title
+            {schedule.title}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>DETAIL</Modal.Body>
+        <Modal.Body>
+          <div className="media p-3">
+            <div className="media-body">
+              <small>
+                Duration:{" "}
+                <i>
+                  {scheduleDate(schedule.starts_at)} -{" "}
+                  {scheduleDate(schedule.ends_at)}
+                </i>
+              </small>
+              <p>{schedule.description}</p>
+            </div>
+          </div>
+        </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.handleClose}>Close</Button>
         </Modal.Footer>
