@@ -14,6 +14,7 @@ import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Calendar from "./components/calendar/Calendar";
+import Event from "./components/event/Event";
 import NotFound from "./components/not-found/NotFound";
 
 import "./App.css";
@@ -44,11 +45,14 @@ class App extends Component {
         <Router>
           <div className="App">
             <Navbar />
-            <div className="container">
+            <div className="body-container container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Switch>
                 <PrivateRoute exact path="/" component={Calendar} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/event/:id" component={Event} />
               </Switch>
               <Route exact path="/not-found" component={NotFound} />
             </div>
