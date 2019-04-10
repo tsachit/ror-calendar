@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   GET_ERRORS,
   CLEAR_ERRORS,
+  GET_SCHEDULE,
   GET_SCHEDULES,
   SCHEDULES_LOADING
 } from "./types";
@@ -22,6 +23,25 @@ export const getSchedules = () => dispatch => {
       dispatch({
         type: GET_SCHEDULES,
         payload: []
+      })
+    );
+};
+
+// Get Schedule
+export const getSchedule = id => dispatch => {
+  dispatch(setScheduleLoading());
+  axios
+    .get(`/schedules/${id}`)
+    .then(res =>
+      dispatch({
+        type: GET_SCHEDULE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_SCHEDULE,
+        payload: null
       })
     );
 };

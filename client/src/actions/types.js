@@ -1,5 +1,6 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER ";
+export const GET_SCHEDULE = "GET_SCHEDULE ";
 export const GET_SCHEDULES = "GET_SCHEDULES ";
 export const SCHEDULES_LOADING = "SCHEDULES_LOADING ";

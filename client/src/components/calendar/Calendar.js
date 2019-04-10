@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import Scheduler from "./Scheduler";
+import ViewSchedule from "./ViewSchedule";
 import { getSchedules } from "../../actions/calendarActions";
 import moment from "moment";
 import { filterSingleScheduleDates } from "../../utils/helper";
@@ -23,7 +24,9 @@ class Calendar extends Component {
     this.state = {
       calendarEvents: [],
       showScheduleCreator: false,
-      selectedDate: moment().toDate()
+      showScheduleViewer: false,
+      selectedDate: moment().toDate(),
+      selectedSchedule: null
     };
     this.addEvent = this.addEvent.bind(this);
   }
@@ -31,7 +34,16 @@ class Calendar extends Component {
   handleDateClick = arg => {
     this.setState({
       showScheduleCreator: true,
+      showScheduleViewer: false,
       selectedDate: moment(arg.date).toDate()
+    });
+  };
+
+  handleEventClick = arg => {
+    this.setState({
+      showScheduleCreator: false,
+      showScheduleViewer: true,
+      selectedSchedule: arg.event.id
     });
   };
 
@@ -59,7 +71,12 @@ class Calendar extends Component {
   }
 
   render() {
-    const { showScheduleCreator, selectedDate } = this.state;
+    const {
+      showScheduleCreator,
+      showScheduleViewer,
+      selectedDate,
+      selectedSchedule
+    } = this.state;
     const { schedules, loading } = this.props.calendar;
     let calendarContent = <Spinner />;
     if (schedules !== null && !loading) {
@@ -77,6 +94,8 @@ class Calendar extends Component {
           // weekends={this.state.calendarWeekends}
           events={this.state.calendarEvents}
           dateClick={this.handleDateClick}
+          editable={true}
+          eventClick={this.handleEventClick}
         />
       );
     }
@@ -92,6 +111,10 @@ class Calendar extends Component {
           addEvent={this.addEvent}
           showScheduleCreator={showScheduleCreator}
           selectedDate={selectedDate}
+        />
+        <ViewSchedule
+          showScheduleViewer={showScheduleViewer}
+          selectedSchedule={selectedSchedule}
         />
       </div>
     );
