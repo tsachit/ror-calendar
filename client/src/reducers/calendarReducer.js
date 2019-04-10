@@ -1,8 +1,4 @@
-import {
-  GET_SCHEDULES,
-  SCHEDULES_LOADING,
-  SCHEDULE_CREATED
-} from "../actions/types";
+import { GET_SCHEDULES, SCHEDULES_LOADING } from "../actions/types";
 
 const initialState = {
   schedules: [],
@@ -21,12 +17,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         schedules: action.payload,
-        loading: false
-      };
-    case SCHEDULE_CREATED:
-      return {
-        ...state,
-        schedule: action.payload,
         loading: false
       };
     default:

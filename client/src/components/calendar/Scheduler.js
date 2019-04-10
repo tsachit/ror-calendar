@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { Button } from "react-bootstrap";
@@ -9,6 +10,8 @@ import Modal from "react-bootstrap/Modal";
 import DatePicker from "react-datepicker";
 import isAfter from "date-fns/isAfter";
 import { datepickerDisplayFormat } from "../../utils/helper";
+import { createSchedule } from "../../actions/calendarActions";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 class Scheduler extends Component {
@@ -23,6 +26,7 @@ class Scheduler extends Component {
       title: "",
       starts_at: props.selectedDate,
       ends_at: props.selectedDate,
+      description: "",
       errors: {}
     };
 
@@ -46,7 +50,12 @@ class Scheduler extends Component {
   handleDateChangeEnd = endDate => this.handleDateChange({ endDate });
 
   handleClose() {
-    this.setState({ showScheduleCreator: false });
+    this.setState({
+      showScheduleCreator: false,
+      title: "",
+      description: "",
+      errors: {}
+    });
   }
 
   handleShow() {
@@ -63,18 +72,25 @@ class Scheduler extends Component {
     const schedule = {
       title: this.state.title,
       starts_at: this.state.starts_at,
-      ends_at: this.state.ends_at
+      ends_at: this.state.ends_at,
+      description: this.state.description
     };
-
-    this.props.addEvent(schedule);
+    this.props.createSchedule(schedule, this.props.addEvent, this.handleClose);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      showScheduleCreator: nextProps.showScheduleCreator,
-      starts_at: nextProps.selectedDate,
-      ends_at: nextProps.selectedDate
-    });
+    if (nextProps.showScheduleCreator) {
+      this.setState({ showScheduleCreator: nextProps.showScheduleCreator });
+    }
+    if (nextProps.selectedDate) {
+      this.setState({
+        starts_at: nextProps.selectedDate,
+        ends_at: nextProps.selectedDate
+      });
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   render() {
@@ -84,7 +100,7 @@ class Scheduler extends Component {
         <form onSubmit={this.onSubmit} noValidate>
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
-              Modal heading
+              Create a Schedule
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -140,6 +156,12 @@ class Scheduler extends Component {
                 </div>
               </div>
             </div>
+            <TextAreaFieldGroup
+              placeholder="Write a short description"
+              name="description"
+              value={this.state.description}
+              onChange={this.onChange}
+            />
           </Modal.Body>
           <Modal.Footer>
             <input type="submit" className="btn btn-info" />
@@ -152,7 +174,8 @@ class Scheduler extends Component {
 }
 
 Scheduler.propTypes = {
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  createSchedule: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -161,5 +184,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { createSchedule }
 )(withRouter(Scheduler));

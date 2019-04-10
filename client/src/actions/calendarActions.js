@@ -2,8 +2,8 @@ import axios from "axios";
 
 import {
   GET_ERRORS,
+  CLEAR_ERRORS,
   GET_SCHEDULES,
-  SCHEDULE_CREATED,
   SCHEDULES_LOADING
 } from "./types";
 
@@ -27,25 +27,31 @@ export const getSchedules = () => dispatch => {
 };
 
 // Create Schedule
-export const createSchedule = (scheduleData, history) => dispatch => {
-  dispatch({
-    type: SCHEDULE_CREATED,
-    payload: scheduleData
-  });
-  // axios
-  //   .post("/api/schedules", scheduleData)
-  //   .then(res => history.push("/schedules"))
-  //   .catch(err =>
-  //     dispatch({
-  //       type: GET_ERRORS,
-  //       payload: err.response.data
-  //     })
-  //   );
+export const createSchedule = (
+  scheduleData,
+  addEventCallback,
+  closePopupCallback
+) => dispatch => {
+  axios
+    .post("/schedules", scheduleData)
+    .then(res => closePopupCallback(addEventCallback(res.data)))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };
 
 // Set loading state
 export const setScheduleLoading = () => {
   return {
     type: SCHEDULES_LOADING
+  };
+};
+
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };

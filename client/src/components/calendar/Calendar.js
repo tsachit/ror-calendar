@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import Scheduler from "./Scheduler";
-import { createSchedule, getSchedules } from "../../actions/calendarActions";
+import { getSchedules } from "../../actions/calendarActions";
 import moment from "moment";
+import { filterSingleScheduleDates } from "../../utils/helper";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timegridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { datetimeSaveFormat } from "../../utils/helper";
 
 // must manually import the stylesheets for each plugin
 import "@fullcalendar/core/main.css";
@@ -37,13 +37,8 @@ class Calendar extends Component {
 
   addEvent = schedule => {
     const { calendarEvents } = this.state;
-    calendarEvents.push({
-      // creates a new array
-      title: schedule.title,
-      start: schedule.starts_at,
-      end: schedule.ends_at
-    });
-    this.setState({ calendarEvents, showScheduleCreator: false });
+    calendarEvents.push(filterSingleScheduleDates(schedule));
+    this.setState({ calendarEvents });
   };
 
   componentDidMount() {
@@ -57,13 +52,7 @@ class Calendar extends Component {
       Object.keys(newProps.calendar.schedules).length > 0
     ) {
       newProps.calendar.schedules.forEach((calendarSchedule, index) => {
-        // start date conversion
-        calendarSchedule["start"] = moment(calendarSchedule.starts_at).toDate();
-        delete calendarSchedule.starts_at;
-        // end date conversion
-        calendarSchedule["end"] = moment(calendarSchedule.ends_at).toDate();
-        delete calendarSchedule.ends_at;
-        return calendarSchedule[index];
+        calendarSchedule = filterSingleScheduleDates(calendarSchedule);
       });
       this.setState({ calendarEvents: newProps.calendar.schedules });
     }
@@ -110,9 +99,7 @@ class Calendar extends Component {
 }
 
 Calendar.propTypes = {
-  // showScheduleCreator: PropTypes.object.isRequired,
-  getSchedules: PropTypes.func.isRequired,
-  createSchedule: PropTypes.func.isRequired
+  getSchedules: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -121,5 +108,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createSchedule, getSchedules }
+  { getSchedules }
 )(Calendar);

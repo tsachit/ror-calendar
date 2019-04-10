@@ -18,7 +18,7 @@ Bundler version 1.17.2  <br />
 
 2. Schedule
     - As an app user, one should be able to 
-      - [ ] create a schedule, using a title, description, DateTime, how long event will happen (These are mandatory fields, you are free to add other fields)
+      - [X] create a schedule, using a title, description, DateTime, how long event will happen (These are mandatory fields, you are free to add other fields)
       - [ ] edit her/his schedule
       - [ ] delete her/his schedule
       - [ ] invite people to that schedule through email
