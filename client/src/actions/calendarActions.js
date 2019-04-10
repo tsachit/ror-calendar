@@ -5,6 +5,8 @@ import {
   CLEAR_ERRORS,
   GET_SCHEDULE,
   GET_SCHEDULES,
+  UPDATE_SCHEDULE,
+  DELETE_SCHEDULE,
   SCHEDULES_LOADING
 } from "./types";
 
@@ -55,6 +57,42 @@ export const createSchedule = (
   axios
     .post("/schedules", scheduleData)
     .then(res => closePopupCallback(addEventCallback(res.data)))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Update Schedule
+export const updateSchedule = (id, scheduleData) => dispatch => {
+  axios
+    .put(`/schedules/${id}`, scheduleData)
+    .then(res =>
+      dispatch({
+        type: UPDATE_SCHEDULE,
+        payload: id
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Delete Schedule
+export const deleteSchedule = id => dispatch => {
+  axios
+    .delete(`/schedules/${id}`)
+    .then(res =>
+      dispatch({
+        type: DELETE_SCHEDULE,
+        payload: id
+      })
+    )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

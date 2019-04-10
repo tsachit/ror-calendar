@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
@@ -43,6 +43,15 @@ class ViewSchedule extends Component {
   render() {
     const { showScheduleViewer } = this.state;
     const { schedule } = this.props.calendar;
+    const { user } = this.props.auth;
+    let footerContent = "";
+    if (user.id == schedule.user_id) {
+      footerContent = (
+        <Link to={`/event/${schedule.id}`} className="btn btn-sm btn-info">
+          More Actions
+        </Link>
+      );
+    }
     return (
       <Modal show={showScheduleViewer} onHide={this.handleClose}>
         <Modal.Header closeButton>
@@ -65,7 +74,10 @@ class ViewSchedule extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.handleClose}>Close</Button>
+          <Button className="btn btn-sm" onClick={this.handleClose}>
+            Close
+          </Button>
+          {footerContent}
         </Modal.Footer>
       </Modal>
     );
@@ -77,6 +89,7 @@ ViewSchedule.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   calendar: state.calendar
 });
 

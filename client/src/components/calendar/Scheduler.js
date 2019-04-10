@@ -164,8 +164,10 @@ class Scheduler extends Component {
             />
           </Modal.Body>
           <Modal.Footer>
-            <input type="submit" className="btn btn-info" />
-            <Button onClick={this.handleClose}>Close</Button>
+            <Button className="btn btn-sm" onClick={this.handleClose}>
+              Close
+            </Button>
+            <input type="submit" className="btn btn-sm btn-info" />
           </Modal.Footer>
         </form>
       </Modal>
