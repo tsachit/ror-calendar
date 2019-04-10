@@ -19,7 +19,7 @@ class Api::V1::SchedulesController < ApplicationController
     final_params['user_id'] = @current_user['id']
     @schedule = Schedule.new(final_params)
     if @schedule.save
-      render json: @schedule, status: :created
+      render json: @schedule.slice('id', 'title', 'description', 'starts_at', 'ends_at'), status: :created
     else
       validation_error(@schedule)
     end
