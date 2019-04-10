@@ -87,9 +87,9 @@ class Calendar extends Component {
           themeSystem="bootstrap4"
           defaultView="dayGridMonth"
           header={{
-            left: "prev,next today",
+            left: "prev,next",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay"
+            right: ""
           }}
           plugins={[dayGridPlugin, timegridPlugin, interactionPlugin]}
           // ref={this.calendarComponentRef}
