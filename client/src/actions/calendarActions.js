@@ -1,6 +1,30 @@
-// import axios from "axios";
+import axios from "axios";
 
-import { GET_SCHEDULES, SCHEDULE_CREATED, SCHEDULES_LOADING } from "./types";
+import {
+  GET_ERRORS,
+  GET_SCHEDULES,
+  SCHEDULE_CREATED,
+  SCHEDULES_LOADING
+} from "./types";
+
+// Get all Schedules
+export const getSchedules = () => dispatch => {
+  dispatch(setScheduleLoading());
+  axios
+    .get("/schedules")
+    .then(res =>
+      dispatch({
+        type: GET_SCHEDULES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_SCHEDULES,
+        payload: []
+      })
+    );
+};
 
 // Create Schedule
 export const createSchedule = (scheduleData, history) => dispatch => {
@@ -15,29 +39,6 @@ export const createSchedule = (scheduleData, history) => dispatch => {
   //     dispatch({
   //       type: GET_ERRORS,
   //       payload: err.response.data
-  //     })
-  //   );
-};
-
-// Get all Schedules
-export const getSchedules = () => dispatch => {
-  dispatch(setScheduleLoading());
-  dispatch({
-    type: GET_SCHEDULES,
-    payload: []
-  });
-  // axios
-  //   .get("/api/schedules")
-  //   .then(res =>
-  //     dispatch({
-  //       type: GET_SCHEDULES,
-  //       payload: res.data
-  //     })
-  //   )
-  //   .catch(err =>
-  //     dispatch({
-  //       type: GET_SCHEDULES,
-  //       payload: null
   //     })
   //   );
 };

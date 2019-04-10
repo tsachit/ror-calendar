@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   schedules: [],
-  newSchedule: [],
+  schedule: {},
   loading: false
 };
 
@@ -26,7 +26,7 @@ export default function(state = initialState, action) {
     case SCHEDULE_CREATED:
       return {
         ...state,
-        newSchedule: action.payload,
+        schedule: action.payload,
         loading: false
       };
     default:

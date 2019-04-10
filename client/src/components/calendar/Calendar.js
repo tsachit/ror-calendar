@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import Scheduler from "./Scheduler";
 import { createSchedule, getSchedules } from "../../actions/calendarActions";
+import moment from "moment";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timegridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { datetimeSaveFormat } from "../../utils/helper";
 
 // must manually import the stylesheets for each plugin
 import "@fullcalendar/core/main.css";
@@ -21,7 +23,7 @@ class Calendar extends Component {
     this.state = {
       calendarEvents: [],
       showScheduleCreator: false,
-      selectedDate: new Date()
+      selectedDate: moment().toDate()
     };
     this.addEvent = this.addEvent.bind(this);
   }
@@ -29,17 +31,17 @@ class Calendar extends Component {
   handleDateClick = arg => {
     this.setState({
       showScheduleCreator: true,
-      selectedDate: new Date(arg.date)
+      selectedDate: moment(arg.date).toDate()
     });
   };
 
-  addEvent = newSchedule => {
+  addEvent = schedule => {
     const { calendarEvents } = this.state;
     calendarEvents.push({
       // creates a new array
-      title: newSchedule.title,
-      start: newSchedule.starts_at,
-      end: newSchedule.ends_at
+      title: schedule.title,
+      start: schedule.starts_at,
+      end: schedule.ends_at
     });
     this.setState({ calendarEvents, showScheduleCreator: false });
   };
@@ -48,12 +50,30 @@ class Calendar extends Component {
     this.props.getSchedules();
   }
 
+  componentWillReceiveProps(newProps) {
+    if (
+      newProps.calendar &&
+      newProps.calendar.schedules &&
+      Object.keys(newProps.calendar.schedules).length > 0
+    ) {
+      newProps.calendar.schedules.forEach((calendarSchedule, index) => {
+        // start date conversion
+        calendarSchedule["start"] = moment(calendarSchedule.starts_at).toDate();
+        delete calendarSchedule.starts_at;
+        // end date conversion
+        calendarSchedule["end"] = moment(calendarSchedule.ends_at).toDate();
+        delete calendarSchedule.ends_at;
+        return calendarSchedule[index];
+      });
+      this.setState({ calendarEvents: newProps.calendar.schedules });
+    }
+  }
+
   render() {
     const { showScheduleCreator, selectedDate } = this.state;
     const { schedules, loading } = this.props.calendar;
-
     let calendarContent = <Spinner />;
-    if (schedules === null || loading || Object.keys(schedules).length === 0) {
+    if (schedules !== null && !loading) {
       calendarContent = (
         <FullCalendar
           themeSystem="bootstrap4"

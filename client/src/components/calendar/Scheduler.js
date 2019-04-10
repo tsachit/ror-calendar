@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { connect } from "react-redux";
+import classnames from "classnames";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import DatePicker from "react-datepicker";
 import isAfter from "date-fns/isAfter";
+import { datepickerDisplayFormat } from "../../utils/helper";
 import "react-datepicker/dist/react-datepicker.css";
 
 class Scheduler extends Component {
@@ -58,13 +60,13 @@ class Scheduler extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const newSchedule = {
+    const schedule = {
       title: this.state.title,
       starts_at: this.state.starts_at,
       ends_at: this.state.ends_at
     };
 
-    this.props.addEvent(newSchedule);
+    this.props.addEvent(schedule);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,32 +101,42 @@ class Scheduler extends Component {
                 <div className="form-group">
                   <DatePicker
                     name="starts_at"
+                    className={classnames("form-control", {
+                      "is-invalid": errors.starts_at
+                    })}
                     selected={starts_at}
                     selectsStart
                     timeInputLabel="Time:"
-                    dateFormat="MM/dd/yyyy h:mm aa"
+                    dateFormat={datepickerDisplayFormat}
                     showTimeInput
                     startDate={starts_at}
                     endDate={ends_at}
                     onChange={this.handleDateChangeStart}
-                    error={errors.starts_at}
                   />
+                  {errors.starts_at && (
+                    <div className="invalid-feedback">{errors.starts_at}</div>
+                  )}
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <DatePicker
                     name="ends_at"
+                    className={classnames("form-control", {
+                      "is-invalid": errors.ends_at
+                    })}
                     selected={ends_at}
                     selectsStart
                     timeInputLabel="Time:"
-                    dateFormat="MM/dd/yyyy h:mm aa"
+                    dateFormat={datepickerDisplayFormat}
                     showTimeInput
                     startDate={starts_at}
                     endDate={ends_at}
                     onChange={this.handleDateChangeEnd}
-                    error={ends_at}
                   />
+                  {errors.ends_at && (
+                    <div className="invalid-feedback">{errors.ends_at}</div>
+                  )}
                 </div>
               </div>
             </div>
