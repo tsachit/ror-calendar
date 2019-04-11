@@ -13,6 +13,9 @@ Bundler version 1.17.2 <br />
 
 - Copy config/application.copy.yml and paste as config/application.yml
 - Fill the necessary database fields
+- Frontend can be hosted with "npm start", will use 3000 port
+- For Backend/API use "rails s -p 5000", will use 5000 port
+- If you don't have 5000 port available for rails, use any port number and update the port number in package.json for api.
 
 ### App Description
 
@@ -29,7 +32,7 @@ Bundler version 1.17.2 <br />
 
      - [x] create a schedule, using a title, description, DateTime, how long event will happen (These are mandatory fields, you are free to add other fields)
      - [x] edit her/his schedule
-     - [ ] delete her/his schedule
+     - [x] delete her/his schedule
      - [ ] invite people to that schedule through email
      - [ ] see who accepted/rejected the invitation
      - [ ] set a notification for any schedule, in-app notification is mandatory, you are free to take it further with email notification/push information
