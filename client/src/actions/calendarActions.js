@@ -5,7 +5,6 @@ import {
   CLEAR_ERRORS,
   GET_SCHEDULE,
   GET_SCHEDULES,
-  UPDATE_SCHEDULE,
   DELETE_SCHEDULE,
   SCHEDULES_LOADING
 } from "./types";
@@ -31,7 +30,7 @@ export const getSchedules = () => dispatch => {
 
 // Get Schedule
 export const getSchedule = id => dispatch => {
-  dispatch(setScheduleLoading());
+  dispatch(clearErrors());
   axios
     .get(`/schedules/${id}`)
     .then(res =>
@@ -66,15 +65,10 @@ export const createSchedule = (
 };
 
 // Update Schedule
-export const updateSchedule = (id, scheduleData) => dispatch => {
+export const updateSchedule = (id, scheduleData, history) => dispatch => {
   axios
     .put(`/schedules/${id}`, scheduleData)
-    .then(res =>
-      dispatch({
-        type: UPDATE_SCHEDULE,
-        payload: id
-      })
-    )
+    .then(res => history.push("/"))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

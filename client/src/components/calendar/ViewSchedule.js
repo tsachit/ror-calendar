@@ -45,7 +45,7 @@ class ViewSchedule extends Component {
     const { schedule } = this.props.calendar;
     const { user } = this.props.auth;
     let footerContent = "";
-    if (user.id == schedule.user_id) {
+    if (user.id === schedule.user_id) {
       footerContent = (
         <Link to={`/event/${schedule.id}`} className="btn btn-sm btn-info">
           More Actions

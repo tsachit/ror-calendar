@@ -7,7 +7,7 @@ class Invitation extends Component {
         <h4>Guests</h4>
         <form>
           <div className="form-group">
-            <label for="exampleFormControlInput1">Email address</label>
+            <label htmlFor="exampleFormControlInput1">Email address</label>
             <input
               type="email"
               className="form-control"

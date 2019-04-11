@@ -9,9 +9,11 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import DatePicker from "react-datepicker";
 import isAfter from "date-fns/isAfter";
-import { datepickerDisplayFormat } from "../../utils/helper";
-import { updateSchedule } from "../../actions/calendarActions";
 import Invitation from "./Invitation";
+import { datepickerDisplayFormat } from "../../utils/helper";
+import { getSchedule, updateSchedule } from "../../actions/calendarActions";
+import { filterSingleScheduleDates } from "../../utils/helper";
+import moment from "moment";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -20,10 +22,9 @@ class Event extends Component {
     super(props);
 
     this.state = {
-      showScheduleCreator: props.showScheduleCreator,
       title: "",
-      starts_at: props.selectedDate,
-      ends_at: props.selectedDate,
+      starts_at: moment().toDate(),
+      ends_at: moment().toDate(),
       description: "",
       errors: {}
     };
@@ -60,7 +61,35 @@ class Event extends Component {
       ends_at: this.state.ends_at,
       description: this.state.description
     };
-    this.props.createSchedule(schedule, this.props.addEvent, this.handleClose);
+    this.props.updateSchedule(
+      this.props.match.params.id,
+      schedule,
+      this.props.history
+    );
+  }
+
+  componentDidMount() {
+    if (this.props.match.params.id) {
+      this.props.getSchedule(this.props.match.params.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    if (nextProps.calendar && nextProps.calendar.schedule) {
+      const schedule = filterSingleScheduleDates(nextProps.calendar.schedule);
+
+      this.setState({
+        title: schedule.title,
+        description: schedule.description,
+        starts_at: schedule.starts_at,
+        start: schedule.start,
+        ends_at: schedule.ends_at,
+        end: schedule.end
+      });
+    }
   }
 
   render() {
@@ -69,7 +98,7 @@ class Event extends Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <form>
+            <form onSubmit={this.onSubmit} noValidate>
               <TextFieldGroup
                 placeholder="Title"
                 name="title"
@@ -131,14 +160,14 @@ class Event extends Component {
 
               <div className="row">
                 <div className="col">
-                  <button type="submit" class="btn btn-danger">
+                  <Button className="btn btn-danger" onClick={this.deleteEvent}>
                     Delete
-                  </button>
+                  </Button>
                 </div>
                 <div className="col text-right">
-                  <button type="submit" class="btn btn-primary">
+                  <Button className="btn btn-primary" type="submit">
                     Submit
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
@@ -152,14 +181,17 @@ class Event extends Component {
 
 Event.propTypes = {
   errors: PropTypes.object.isRequired,
+  calendar: PropTypes.object.isRequired,
+  getSchedule: PropTypes.func.isRequired,
   updateSchedule: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+  calendar: state.calendar,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { updateSchedule }
+  { getSchedule, updateSchedule }
 )(withRouter(Event));
