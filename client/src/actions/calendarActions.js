@@ -5,7 +5,6 @@ import {
   CLEAR_ERRORS,
   GET_SCHEDULE,
   GET_SCHEDULES,
-  DELETE_SCHEDULE,
   SCHEDULES_LOADING
 } from "./types";
 
@@ -78,15 +77,10 @@ export const updateSchedule = (id, scheduleData, history) => dispatch => {
 };
 
 // Delete Schedule
-export const deleteSchedule = id => dispatch => {
+export const deleteSchedule = (id, history) => dispatch => {
   axios
     .delete(`/schedules/${id}`)
-    .then(res =>
-      dispatch({
-        type: DELETE_SCHEDULE,
-        payload: id
-      })
-    )
+    .then(res => history.push("/"))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

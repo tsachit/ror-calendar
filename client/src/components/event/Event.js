@@ -6,12 +6,16 @@ import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { Button } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
+import Dialog from "react-bootstrap-dialog";
 import DatePicker from "react-datepicker";
 import isAfter from "date-fns/isAfter";
 import Invitation from "./Invitation";
 import { datepickerDisplayFormat } from "../../utils/helper";
-import { getSchedule, updateSchedule } from "../../actions/calendarActions";
+import {
+  getSchedule,
+  updateSchedule,
+  deleteSchedule
+} from "../../actions/calendarActions";
 import { filterSingleScheduleDates } from "../../utils/helper";
 import moment from "moment";
 
@@ -41,6 +45,7 @@ class Event extends Component {
       endDate = startDate;
     }
 
+    this.openConfirmationModal = this.openConfirmationModal.bind(this);
     this.setState({ starts_at: startDate, ends_at: endDate });
   };
 
@@ -67,6 +72,35 @@ class Event extends Component {
       this.props.history
     );
   }
+
+  openConfirmationModal = () => {
+    this.dialog.show({
+      title: "Confirm Delete",
+      body: "Are you sure you want to delete this event?",
+      actions: [
+        Dialog.DefaultAction(
+          "Hell No!",
+          () => {},
+          "btn-default btn-outline-secondary"
+        ),
+        Dialog.DefaultAction(
+          "Yes, absolutely!",
+          () => {
+            this.props.deleteSchedule(
+              this.props.match.params.id,
+              this.props.history
+            );
+          },
+          "btn-primary"
+        )
+      ],
+      bsSize: "small",
+      onHide: dialog => {
+        dialog.hide();
+        console.log("closed by clicking background.");
+      }
+    });
+  };
 
   componentDidMount() {
     if (this.props.match.params.id) {
@@ -160,7 +194,10 @@ class Event extends Component {
 
               <div className="row">
                 <div className="col">
-                  <Button className="btn btn-danger" onClick={this.deleteEvent}>
+                  <Button
+                    className="btn btn-danger"
+                    onClick={this.openConfirmationModal}
+                  >
                     Delete
                   </Button>
                 </div>
@@ -171,6 +208,11 @@ class Event extends Component {
                 </div>
               </div>
             </form>
+            <Dialog
+              ref={el => {
+                this.dialog = el;
+              }}
+            />
           </div>
           <Invitation />
         </div>
@@ -183,7 +225,8 @@ Event.propTypes = {
   errors: PropTypes.object.isRequired,
   calendar: PropTypes.object.isRequired,
   getSchedule: PropTypes.func.isRequired,
-  updateSchedule: PropTypes.func.isRequired
+  updateSchedule: PropTypes.func.isRequired,
+  deleteSchedule: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -193,5 +236,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getSchedule, updateSchedule }
+  { getSchedule, updateSchedule, deleteSchedule }
 )(withRouter(Event));
