@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   schedules: [],
-  schedule: null,
+  schedule: {},
   loading: false
 };
 

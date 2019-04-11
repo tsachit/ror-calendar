@@ -28,7 +28,7 @@ export const getSchedules = () => dispatch => {
 };
 
 // Get Schedule
-export const getSchedule = id => dispatch => {
+export const getSchedule = (id, history = false) => dispatch => {
   dispatch(clearErrors());
   axios
     .get(`/schedules/${id}`)
@@ -38,12 +38,16 @@ export const getSchedule = id => dispatch => {
         payload: res.data
       })
     )
-    .catch(err =>
-      dispatch({
-        type: GET_SCHEDULE,
-        payload: null
-      })
-    );
+    .catch(err => {
+      if (history) {
+        return history.push("/not-found");
+      } else {
+        dispatch({
+          type: GET_SCHEDULE,
+          payload: null
+        });
+      }
+    });
 };
 
 // Create Schedule

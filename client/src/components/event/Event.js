@@ -97,14 +97,13 @@ class Event extends Component {
       bsSize: "small",
       onHide: dialog => {
         dialog.hide();
-        console.log("closed by clicking background.");
       }
     });
   };
 
   componentDidMount() {
     if (this.props.match.params.id) {
-      this.props.getSchedule(this.props.match.params.id);
+      this.props.getSchedule(this.props.match.params.id, this.props.history);
     }
   }
 
@@ -112,7 +111,8 @@ class Event extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-    if (nextProps.calendar && nextProps.calendar.schedule) {
+    // checking if schedule is empty object
+    if (nextProps.calendar && Object.keys(nextProps.calendar.schedule).length) {
       const schedule = filterSingleScheduleDates(nextProps.calendar.schedule);
 
       this.setState({
