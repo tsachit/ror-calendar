@@ -1,5 +1,5 @@
 class Api::V1::SchedulesController < ApplicationController
-  before_action :authorize_request
+  before_action :authorize_request, except: [:seeInvitation]
   before_action :check_user_schedule_access, only: [:update, :destroy]
   before_action :get_schedule, only: [:show]
 
@@ -41,6 +41,20 @@ class Api::V1::SchedulesController < ApplicationController
       render json: {success: true}, status: :ok
     else 
       validation_error(@schedule)
+    end
+  end
+
+  # GET /schedules/:token/seeInvitation
+  def seeInvitation
+    begin
+      @schedule = Schedule.joins(:invitations).select("schedules.*").where(invitations: { invite_token: params[:token] }).first
+      if(@schedule) 
+        render json: @schedule, status: :ok
+      else 
+        render json: { not_found: 'Schedule not found' }, status: :not_found
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { not_found: 'Schedule not found' }, status: :not_found
     end
   end
 

@@ -98,6 +98,29 @@ export const deleteSchedule = (id, history) => dispatch => {
     );
 };
 
+// Get Schedule
+export const getScheduleFromToken = (token, history) => dispatch => {
+  dispatch(setScheduleLoading());
+  axios
+    .get(`/schedules/${token}/see-invitation`)
+    .then(res =>
+      dispatch({
+        type: GET_SCHEDULE,
+        payload: res.data
+      })
+    )
+    .catch(err => {
+      if (history) {
+        return history.push("/not-found");
+      } else {
+        dispatch({
+          type: GET_SCHEDULE,
+          payload: null
+        });
+      }
+    });
+};
+
 // Set loading state
 export const setScheduleLoading = () => {
   return {

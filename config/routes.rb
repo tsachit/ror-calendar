@@ -12,6 +12,7 @@ Rails.application.routes.draw do
           get ':id/guests', controller: :invitations, action: :guests 
           post ':id/invite', controller: :invitations, action: :invite 
           delete ':id/uninvite/:invitation_id', controller: :invitations, action: :uninvite 
+          get ':token/see-invitation', controller: :schedules, action: :seeInvitation 
         end
       end
     end

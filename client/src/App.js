@@ -15,6 +15,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Calendar from "./components/calendar/Calendar";
 import Event from "./components/event/Event";
+import ViewEvent from "./components/event/ViewEvent";
 import NotFound from "./components/not-found/NotFound";
 
 import "./App.css";
@@ -54,6 +55,7 @@ class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/event/:id" component={Event} />
               </Switch>
+              <Route exact path="/invitation/:token" component={ViewEvent} />
               <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />
