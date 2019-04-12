@@ -5,7 +5,7 @@ class Api::V1::SchedulesController < ApplicationController
 
   # GET /schedules
   def index
-    @schedules = Schedule.select('id', 'title', 'description', 'starts_at', 'ends_at').all
+    @schedules = Schedule.select('id', 'title', 'description', 'starts_at', 'ends_at').where({user_id: @current_user['id']}).all
     render json: @schedules, status: :ok
   end
 
