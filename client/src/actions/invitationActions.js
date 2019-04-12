@@ -21,14 +21,18 @@ export const getGuests = scheduleID => dispatch => {
 };
 
 // Add a Guest
-// export const addGuest = scheduleID => dispatch => {
-//   axios
-//     .post(`/invitation/${scheduleID}`, scheduleData)
-//     .then(res => res.data)
-//     .catch(err =>
-//       dispatch({
-//         type: GET_ERRORS,
-//         payload: err.response.data
-//       })
-//     );
-// };
+export const addGuest = (
+  scheduleID,
+  invitationData,
+  addGuestToList
+) => dispatch => {
+  axios
+    .post(`/schedules/${scheduleID}/invite`, invitationData)
+    .then(res => addGuestToList(res.data))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};

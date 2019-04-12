@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { connect } from "react-redux";
-import { getGuests } from "../../actions/invitationActions";
+import { getGuests, addGuest } from "../../actions/invitationActions";
 import { invitationStatus, invitationNotified } from "../../utils/helper";
 import Spinner from "../common/Spinner";
 
@@ -13,11 +13,13 @@ class Invitation extends Component {
 
     this.state = {
       email: "",
+      guests: [],
       errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.addGuestToList = this.addGuestToList.bind(this);
   }
 
   onChange(e) {
@@ -26,15 +28,40 @@ class Invitation extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log("submitted", this.state);
-    // const invitation = {
-    //   email: this.state.email
-    // };
+    if (this.props.match.params.id) {
+      const invitationData = {
+        email: this.state.email
+      };
+      this.props.addGuest(
+        this.props.match.params.id,
+        invitationData,
+        this.addGuestToList
+      );
+    }
+  }
+
+  addGuestToList(guest) {
+    const { guests } = this.state;
+    guests.unshift(guest);
+    this.setState({ email: "", guests, errors: {} });
   }
 
   componentDidMount() {
     if (this.props.match.params.id) {
       this.props.getGuests(this.props.match.params.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    if (
+      nextProps.invitations &&
+      nextProps.invitations.guests &&
+      nextProps.invitations.guests.length
+    ) {
+      this.setState({ guests: nextProps.invitations.guests });
     }
   }
 
@@ -44,7 +71,7 @@ class Invitation extends Component {
     let guestsContent = <Spinner />;
     if (guests !== null && !loading) {
       guestsContent = guests.map(guest => (
-        <tr key={guest._id}>
+        <tr key={guest.id}>
           <td>{guest.email}</td>
           <td>{invitationStatus(guest.status)}</td>
           <td>{invitationNotified(guest.is_notified)}</td>
@@ -96,5 +123,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGuests }
+  { getGuests, addGuest }
 )(withRouter(Invitation));
