@@ -9,7 +9,7 @@ class Api::V1::InvitationsController < ApplicationController
 
   # GET /schedules/:id/guests
   def guests
-    @invitations = Invitation.select('id', 'email', 'status', 'is_notified').where({schedule_id: params[:id]}).all
+    @invitations = Invitation.select('id', 'email', 'status', 'is_notified').where({schedule_id: params[:id]}).order('created_at DESC').all
     render json: @invitations, status: :ok
   end
 
