@@ -73,8 +73,8 @@ class Invitation extends Component {
       guestsContent = guests.map(guest => (
         <tr key={guest.id}>
           <td>{guest.email}</td>
-          <td>{invitationStatus(guest.status)}</td>
-          <td>{invitationNotified(guest.is_notified)}</td>
+          <td dangerouslySetInnerHTML={invitationStatus(guest.status)} />
+          <td dangerouslySetInnerHTML={invitationNotified(guest.is_notified)} />
         </tr>
       ));
     }

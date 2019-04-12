@@ -20,29 +20,29 @@ export const scheduleDate = datetime => {
 
 export const invitationStatus = flag => {
   const statuses = {
-    0: "Pending",
-    1: "Accepted",
-    2: "Rejected"
+    0: '<span class="badge badge-info">Pending</span>',
+    1: '<span class="badge badge-success">Accepted</span>',
+    2: '<span class="badge badge-danger">Rejected</span>'
   };
 
   if (statuses[flag]) {
-    return statuses[flag];
+    return { __html: statuses[flag] };
   }
 
   // default status
-  return statuses[0];
+  return { __html: statuses[0] };
 };
 
 export const invitationNotified = flag => {
   const statuses = {
-    0: "No",
-    1: "Yes"
+    0: '<span class="badge badge-info">No</span>',
+    1: '<span class="badge badge-success">Yes</span>'
   };
 
   if (statuses[flag]) {
-    return statuses[flag];
+    return { __html: statuses[flag] };
   }
 
   // default status
-  return statuses[0];
+  return { __html: statuses[0] };
 };
