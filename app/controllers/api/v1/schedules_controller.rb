@@ -51,14 +51,6 @@ class Api::V1::SchedulesController < ApplicationController
   end
 
   def get_schedule
-    # @schedule = Schedule.find(params[:id])
-    # render json: @schedule
-
-    # if @schedule.nil?
-    #   return render json: { 
-    #     :message => "Schedule not found."
-    #   }, status: :not_found
-    # end
     begin
       @schedule = Schedule.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
