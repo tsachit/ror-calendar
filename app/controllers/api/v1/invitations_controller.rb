@@ -31,6 +31,7 @@ class Api::V1::InvitationsController < ApplicationController
     final_params['invite_token'] = SecureRandom.hex(20)
     @invitation = Invitation.new(final_params)
     if @invitation.save
+      NotifyMailer.with(guest: @invitation).invitation_email.deliver_now
       render json: @invitation.slice('id', 'email', 'status', 'is_notified'), status: :created
     else
       validation_error(@invitation)

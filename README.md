@@ -33,11 +33,11 @@ Bundler version 1.17.2 <br />
      - [x] create a schedule, using a title, description, DateTime, how long event will happen (These are mandatory fields, you are free to add other fields)
      - [x] edit her/his schedule
      - [x] delete her/his schedule
-     - [ ] invite people to that schedule through email
+     - [x] invite people to that schedule through email
      - [x] see who accepted/rejected the invitation
      - [ ] set a notification for any schedule, in-app notification is mandatory, you are free to take it further with email notification/push information
 
    - As a non-app user, one should be able to
-     - [ ] receive an invitation for schedule through email
+     - [x] receive an invitation for schedule through email
      - [ ] following the invitation, access a page which shows the description of the schedule
      - [ ] accept/reject an invitation
