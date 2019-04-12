@@ -17,3 +17,32 @@ export const filterSingleScheduleDates = schedule => {
 export const scheduleDate = datetime => {
   return moment(datetime).format(datepickerDisplayFormatEquivalentForDatetime);
 };
+
+export const invitationStatus = flag => {
+  const statuses = {
+    0: "Pending",
+    1: "Accepted",
+    2: "Rejected"
+  };
+
+  if (statuses[flag]) {
+    return statuses[flag];
+  }
+
+  // default status
+  return statuses[0];
+};
+
+export const invitationNotified = flag => {
+  const statuses = {
+    0: "No",
+    1: "Yes"
+  };
+
+  if (statuses[flag]) {
+    return statuses[flag];
+  }
+
+  // default status
+  return statuses[0];
+};
