@@ -13,6 +13,11 @@ class Api::V1::InvitationsController < ApplicationController
     render json: @invitations, status: :ok
   end
 
+  # GET /schedules/:id/edit
+  def edit
+    render json: @user_schedule, status: :ok
+  end
+
   # GET /schedules/:id/invitation/:access_token
   # basically see invitation by guests
   # def invitation

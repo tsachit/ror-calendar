@@ -30,8 +30,13 @@ export const getSchedules = () => dispatch => {
 // Get Schedule
 export const getSchedule = (id, history = false) => dispatch => {
   dispatch(clearErrors());
+  let url = `/schedules/${id}`;
+  // to access edit page
+  if (history) {
+    url += "/edit";
+  }
   axios
-    .get(`/schedules/${id}`)
+    .get(url)
     .then(res =>
       dispatch({
         type: GET_SCHEDULE,

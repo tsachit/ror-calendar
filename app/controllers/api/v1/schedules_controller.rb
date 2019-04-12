@@ -1,6 +1,7 @@
 class Api::V1::SchedulesController < ApplicationController
   before_action :authorize_request
-  before_action :get_schedule, only: [:show, :update, :destroy]
+  before_action :check_user_schedule_access, only: [:update, :destroy]
+  before_action :get_schedule, only: [:show]
 
   # GET /schedules
   def index
@@ -50,9 +51,17 @@ class Api::V1::SchedulesController < ApplicationController
     params.permit(:title, :description, :starts_at, :ends_at)
   end
 
+  def check_user_schedule_access
+    begin
+      @user_schedule = Schedule.where({user_id: @current_user['id']}).find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { not_found: 'Invalid request, Schedule does not exist' }, status: :not_found
+    end
+  end
+
   def get_schedule
     begin
-      @schedule = Schedule.where({user_id: @current_user['id']}).find(params[:id])
+      @schedule = Schedule.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
       render json: { not_found: 'Schedule not found' }, status: :not_found
     end
