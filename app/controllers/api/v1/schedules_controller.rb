@@ -52,7 +52,7 @@ class Api::V1::SchedulesController < ApplicationController
 
   def get_schedule
     begin
-      @schedule = Schedule.find(params[:id])
+      @schedule = Schedule.where({user_id: @current_user['id']}).find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
       render json: { not_found: 'Schedule not found' }, status: :not_found
     end
