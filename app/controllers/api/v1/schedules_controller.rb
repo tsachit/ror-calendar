@@ -47,7 +47,8 @@ class Api::V1::SchedulesController < ApplicationController
   # GET /schedules/:token/seeInvitation
   def seeInvitation
     begin
-      @schedule = Schedule.joins(:invitations).select("schedules.*").where(invitations: { invite_token: params[:token] }).first
+      @schedule = Schedule.joins(:invitations).select("schedules.*", "invitations.status as responded").where(invitations: { invite_token: params[:token] }).first
+      @schedule['responded'] = (@schedule['responded'] != 0)? true: false
       if(@schedule) 
         render json: @schedule, status: :ok
       else 
