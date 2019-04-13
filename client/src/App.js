@@ -49,13 +49,13 @@ class App extends Component {
             <div className="body-container container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/invitation/:token" component={ViewEvent} />
               <Switch>
                 <PrivateRoute exact path="/" component={Calendar} />
               </Switch>
               <Switch>
                 <PrivateRoute exact path="/event/:id" component={Event} />
               </Switch>
-              <Route exact path="/invitation/:token" component={ViewEvent} />
               <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />

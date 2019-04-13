@@ -7,4 +7,18 @@ class NotifyMailer < ApplicationMailer
     mail(to: @guest.email, subject: 'Calendar Invitation Email')
   end
 
+  def respond_to_invitation_email
+    @invitation = params[:invitation]
+    @url  = "#{ENV['SITE_URL']}/event/#{@invitation['schedule_id']}" 
+    @responder = @invitation.email
+    @inviter = @invitation.schedule.user.email
+
+    @custom_message = "Unfortunately the #{responder} has rejected your invitation to the following event"
+    if(@invitation['status'] == 1)
+      @custom_message = "Hooray! the #{responder} has accepted your invitation to the following event"
+    end
+    
+    mail(to:@inviter, subject: 'Response to Calendar Invitation Email')
+  end
+
 end

@@ -27,10 +27,6 @@ class ViewSchedule extends Component {
     this.setState({ showScheduleViewer: true });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.showScheduleViewer) {
       this.setState({ showScheduleViewer: nextProps.showScheduleViewer });

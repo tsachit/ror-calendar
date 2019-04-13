@@ -26,7 +26,10 @@ class Api::V1::InvitationsController < ApplicationController
     final_params['invite_token'] = SecureRandom.hex(20)
     @invitation = Invitation.new(final_params)
     if @invitation.save
-      NotifyMailer.with(guest: @invitation).invitation_email.deliver_now
+      if(NotifyMailer.with(guest: @invitation).invitation_email.deliver_now)
+        @invitation['is_notified'] = 1
+        @invitation.save
+      end
       render json: @invitation.slice('id', 'email', 'status', 'is_notified'), status: :created
     else
       validation_error(@invitation)
@@ -46,6 +49,7 @@ class Api::V1::InvitationsController < ApplicationController
   # accept or reject
   def respond
     if(@invitation.update(invitation_params))
+      NotifyMailer.with(invitation: @invitation).respond_to_invitation_email.deliver_now
       render json: @invitation, status: :ok
     else 
       validation_error(@invitation)
