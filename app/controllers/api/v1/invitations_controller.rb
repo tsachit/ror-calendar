@@ -1,7 +1,8 @@
 class Api::V1::InvitationsController < ApplicationController
-  before_action :authorize_request
-  before_action :check_user_schedule_access
+  before_action :authorize_request, except: [:respond]
+  before_action :check_user_schedule_access, except: [:respond]
   before_action :get_invitation, only: [:uninvite]
+  before_action :modify_guests_response, only: [:respond]
   
 
   # '0 => Pending, 1 => Accepted, 2 => Rejected'
@@ -17,12 +18,6 @@ class Api::V1::InvitationsController < ApplicationController
   def edit
     render json: @user_schedule, status: :ok
   end
-
-  # GET /schedules/:id/invitation/:access_token
-  # basically see invitation by guests
-  # def invitation
-  #   render json: @schedule, status: :ok
-  # end
 
   # POST /schedules/:id/invite
   def invite
@@ -47,21 +42,21 @@ class Api::V1::InvitationsController < ApplicationController
     end
   end
 
-  # PUT /schedules/:id/invitation/:id
+  # PUT /schedules/:id/invitation/:action
   # accept or reject
-  # def invitation
-  #   if(@invitation.update(invitation_params))
-  #     render json: @invitation, status: :ok
-  #   else 
-  #     validation_error(@invitation)
-  #   end
-  # end
+  def respond
+    if(@invitation.update(invitation_params))
+      render json: @invitation, status: :ok
+    else 
+      validation_error(@invitation)
+    end
+  end
 
   private
 
   def invitation_params
     # whitelist params
-    params.permit(:email)
+    params.permit(:email, :status)
   end
 
   def check_user_schedule_access
@@ -79,4 +74,35 @@ class Api::V1::InvitationsController < ApplicationController
       render json: { not_found: 'Invalid request, Guest not found' }, status: :not_found
     end
   end
+
+
+  def modify_guests_response
+    options = ['accept', 'reject']
+    # check if url is valid
+    if(options.include? params[:response])
+      @invitation = Invitation.where({ invite_token: params[:token] }).first
+      # check if invitation row exists
+      if(@invitation) 
+        # check if already responded
+        if (@invitation['status'] != 0)
+          render json: { invalid: 'Already responded to this event.' }, status: :bad_request
+          return
+        end
+
+        # check if accepted or rejected
+        if(params[:response] == "accept")
+          # accept
+          @invitation['status'] = 1;
+        else
+          # reject
+          @invitation['status'] = 2;
+        end
+      else 
+        render json: { not_found: 'Invitation not found' }, status: :not_found
+      end
+    else 
+      render json: { invalid: 'Invalid request, page not found.' }, status: :bad_request
+    end
+  end
+
 end

@@ -8,11 +8,12 @@ Rails.application.routes.draw do
       post '/auth/register', to: 'users#register'
       resources :schedules, path: :schedules do
         collection do
+          get ':token/see-invitation', controller: :schedules, action: :seeInvitation 
           get ':id/edit', controller: :invitations, action: :edit 
           get ':id/guests', controller: :invitations, action: :guests 
           post ':id/invite', controller: :invitations, action: :invite 
           delete ':id/uninvite/:invitation_id', controller: :invitations, action: :uninvite 
-          get ':token/see-invitation', controller: :schedules, action: :seeInvitation 
+          put ':token/invitation/:response', controller: :invitations, action: :respond 
         end
       end
     end
