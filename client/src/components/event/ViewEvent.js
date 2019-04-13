@@ -4,20 +4,24 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "react-bootstrap";
 import Dialog from "react-bootstrap-dialog";
-import { getScheduleFromToken } from "../../actions/calendarActions";
+import {
+  getScheduleFromToken,
+  respondToInvitation
+} from "../../actions/calendarActions";
 import { filterSingleScheduleDates } from "../../utils/helper";
 import moment from "moment";
 import { scheduleDate } from "../../utils/helper";
 
 class ViewEvent extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       title: "",
       starts_at: moment().toDate(),
       ends_at: moment().toDate(),
       description: "",
+      responded: 0,
       errors: {}
     };
 
@@ -31,16 +35,9 @@ class ViewEvent extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
-    const schedule = {
-      title: this.state.title,
-      starts_at: this.state.starts_at,
-      ends_at: this.state.ends_at,
-      description: this.state.description
-    };
-    this.props.updateSchedule(
-      this.props.match.params.id,
-      schedule,
+    this.props.respondToInvitation(
+      this.props.match.params.token,
+      "accept",
       this.props.history
     );
   }
@@ -59,8 +56,9 @@ class ViewEvent extends Component {
         Dialog.DefaultAction(
           "Yes, absolutely!",
           () => {
-            this.props.deleteSchedule(
-              this.props.match.params.id,
+            this.props.respondToInvitation(
+              this.props.match.params.token,
+              "reject",
               this.props.history
             );
           },
@@ -88,7 +86,11 @@ class ViewEvent extends Component {
       this.setState({ errors: nextProps.errors });
     }
     // checking if schedule is empty object
-    if (nextProps.calendar && Object.keys(nextProps.calendar.schedule).length) {
+    if (
+      nextProps.calendar &&
+      nextProps.calendar.schedule &&
+      Object.keys(nextProps.calendar.schedule).length
+    ) {
       const schedule = filterSingleScheduleDates(nextProps.calendar.schedule);
       this.setState({
         title: schedule.title,
@@ -96,12 +98,35 @@ class ViewEvent extends Component {
         starts_at: schedule.starts_at,
         start: schedule.start,
         ends_at: schedule.ends_at,
-        end: schedule.end
+        end: schedule.end,
+        responded: schedule.responded
       });
     }
   }
 
   render() {
+    let responseContent = "";
+    if (!this.state.responded) {
+      responseContent = (
+        <form onSubmit={this.onSubmit} noValidate>
+          <div className="row">
+            <div className="col">
+              <Button
+                className="btn btn-danger"
+                onClick={this.openConfirmationModal}
+              >
+                Reject
+              </Button>
+            </div>
+            <div className="col text-right">
+              <Button className="btn btn-primary" type="submit">
+                Accept
+              </Button>
+            </div>
+          </div>
+        </form>
+      );
+    }
     return (
       <div className="container">
         <div className="row">
@@ -117,23 +142,7 @@ class ViewEvent extends Component {
                   </i>
                 </small>
                 <p className="card-text">{this.state.description}</p>
-                <form onSubmit={this.onSubmit} noValidate>
-                  <div className="row">
-                    <div className="col">
-                      <Button
-                        className="btn btn-danger"
-                        onClick={this.openConfirmationModal}
-                      >
-                        Reject
-                      </Button>
-                    </div>
-                    <div className="col text-right">
-                      <Button className="btn btn-primary" type="submit">
-                        Accept
-                      </Button>
-                    </div>
-                  </div>
-                </form>
+                {responseContent}
               </div>
             </div>
             {/* {starts_at} - {ends_at} */}
@@ -152,7 +161,8 @@ class ViewEvent extends Component {
 ViewEvent.propTypes = {
   errors: PropTypes.object.isRequired,
   calendar: PropTypes.object.isRequired,
-  getScheduleFromToken: PropTypes.func.isRequired
+  getScheduleFromToken: PropTypes.func.isRequired,
+  respondToInvitation: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -162,5 +172,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getScheduleFromToken }
+  { getScheduleFromToken, respondToInvitation }
 )(withRouter(ViewEvent));

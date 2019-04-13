@@ -50,7 +50,7 @@ class Api::V1::InvitationsController < ApplicationController
   def respond
     if(@invitation.update(invitation_params))
       NotifyMailer.with(invitation: @invitation).respond_to_invitation_email.deliver_now
-      render json: @invitation, status: :ok
+      render json: {success: true}, status: :ok
     else 
       validation_error(@invitation)
     end

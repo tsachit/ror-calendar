@@ -40,4 +40,4 @@ Bundler version 1.17.2 <br />
    - As a non-app user, one should be able to
      - [x] receive an invitation for schedule through email
      - [x] following the invitation, access a page which shows the description of the schedule
-     - [ ] accept/reject an invitation
+     - [x] accept/reject an invitation

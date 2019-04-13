@@ -121,6 +121,20 @@ export const getScheduleFromToken = (token, history) => dispatch => {
     });
 };
 
+// Respond(accept or reject) the invitation
+export const respondToInvitation = (token, action, history) => dispatch => {
+  dispatch(setScheduleLoading());
+  axios
+    .put(`/schedules/${token}/invitation/${action}`)
+    .then(res => history.push(`/register`))
+    .catch(err =>
+      dispatch({
+        type: GET_SCHEDULE,
+        payload: null
+      })
+    );
+};
+
 // Set loading state
 export const setScheduleLoading = () => {
   return {
