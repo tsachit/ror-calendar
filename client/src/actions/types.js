@@ -8,3 +8,4 @@ export const PAGE_NOT_FOUND = "PAGE_NOT_FOUND";
 export const GET_GUESTS = "GET_GUESTS ";
 export const INVITATION_LOADING = "INVITATION_LOADING ";
 export const AUTH_LOADING = "AUTH_LOADING ";
+export const AUTH_LOADED = "AUTH_LOADED ";

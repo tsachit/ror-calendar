@@ -5,6 +5,7 @@ class Api::V1::UsersController < ApplicationController
   # POST /user/register
   def register
     final_params = user_params
+    # final_params['email'] = final_params['email'].downcase
     final_params['registration_token'] = SecureRandom.hex(20)
     @user = User.new(final_params)
     
@@ -36,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
       render json: login_param_errors, status: :unauthorized
       return
     end
-    @user = User.where(email: params[:email], registration_token: nil).first
+    @user = User.where(email: params[:email].downcase, registration_token: nil).first
 
     if @user
       if @user.authenticate(params[:password])
@@ -94,6 +95,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_params
+    params[:username] = params[:username].downcase
+    params[:email] = params[:email].downcase
     params.permit(:username, :email, :password, :password_confirmation)
   end
 

@@ -2,7 +2,12 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  AUTH_LOADING,
+  AUTH_LOADED
+} from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
@@ -10,9 +15,11 @@ export const registerUser = (userData, history) => dispatch => {
   axios
     .post("/auth/register", userData)
     .then(res => {
+      dispatch(stopAuthLoading());
       history.push("/login");
     })
     .catch(err => {
+      dispatch(stopAuthLoading());
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -74,5 +81,12 @@ export const logoutUser = () => dispatch => {
 export const setAuthLoading = () => {
   return {
     type: AUTH_LOADING
+  };
+};
+
+// Stop loading state
+export const stopAuthLoading = () => {
+  return {
+    type: AUTH_LOADED
   };
 };
