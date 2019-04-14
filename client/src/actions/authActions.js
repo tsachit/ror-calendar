@@ -2,10 +2,11 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING } from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
+  dispatch(setAuthLoading());
   axios
     .post("/auth/register", userData)
     .then(res => {
@@ -17,6 +18,14 @@ export const registerUser = (userData, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+
+// Confirm Register User
+export const confirmRegistration = (registrationToken, history) => {
+  axios
+    .get(`/auth/confirmation/${registrationToken}`)
+    .then(res => history.push("/login"))
+    .catch(err => history.push("/not-found"));
 };
 
 // Login User
@@ -59,4 +68,11 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   // Set current user to {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+};
+
+// Set loading state
+export const setAuthLoading = () => {
+  return {
+    type: AUTH_LOADING
+  };
 };

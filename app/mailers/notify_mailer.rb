@@ -1,6 +1,12 @@
 class NotifyMailer < ApplicationMailer
   default from: "no-reply@calendar.com"
 
+  def confirm_registration_email
+    @user = params[:user]
+    @url  = "#{ENV['SITE_URL']}/confirmation/#{@user['registration_token']}" 
+    mail(to: @user.email, subject: 'Registration Confirmation Email')
+  end
+
   def invitation_email
     @guest = params[:guest]
     @url  = "#{ENV['SITE_URL']}/invitation/#{@guest['invite_token']}" 

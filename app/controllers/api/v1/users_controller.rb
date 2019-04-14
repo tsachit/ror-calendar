@@ -1,14 +1,32 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authorize_request, except: [:register, :login]
-  before_action :find_user, except: %i[register login]
+  before_action :authorize_request, except: [:register, :login, :confirm_registration]
+  before_action :find_user, except: %i[register login confirm_registration]
 
   # POST /user/register
   def register
-    @user = User.new(user_params)
+    final_params = user_params
+    final_params['registration_token'] = SecureRandom.hex(20)
+    @user = User.new(final_params)
+    
     if @user.save
+      NotifyMailer.with(user: @user).confirm_registration_email.deliver_now
       render json: @user, status: :created
     else
       validation_error(@user)
+    end
+  end
+
+  def confirm_registration
+    @user = User.where(registration_token: params[:registration_token]).first
+    if @user
+      @user['registration_token'] = nil
+      if @user.save
+        return render json: {success: true}, status: :ok
+      else
+        validation_error(@user)
+      end
+    else
+      return render json: { email: 'User not found' }, status: :not_found
     end
   end
 
@@ -18,7 +36,7 @@ class Api::V1::UsersController < ApplicationController
       render json: login_param_errors, status: :unauthorized
       return
     end
-    @user = User.where(email: params[:email]).first
+    @user = User.where(email: params[:email], registration_token: nil).first
 
     if @user
       if @user.authenticate(params[:password])
@@ -76,12 +94,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(
-      :name, :username, :email, :password, :password_confirmation
-    )
-  end
-
-  def register_params
     params.permit(:username, :email, :password, :password_confirmation)
   end
 

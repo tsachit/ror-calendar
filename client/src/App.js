@@ -13,6 +13,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Confirmation from "./components/auth/Confirmation";
 import Calendar from "./components/calendar/Calendar";
 import Event from "./components/event/Event";
 import ViewEvent from "./components/event/ViewEvent";
@@ -49,6 +50,11 @@ class App extends Component {
             <div className="body-container container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/confirmation/:token"
+                component={Confirmation}
+              />
               <Route exact path="/invitation/:token" component={ViewEvent} />
               <Switch>
                 <PrivateRoute exact path="/" component={Calendar} />

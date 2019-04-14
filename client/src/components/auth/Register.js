@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
+import Spinner from "../common/Spinner";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 
@@ -52,53 +53,56 @@ class Register extends Component {
 
   render() {
     const { errors } = this.state;
+    const { loading } = this.props.auth;
+    let registrationContent = <Spinner />;
+    if (!loading) {
+      registrationContent = (
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Sign Up</h1>
+            <p className="lead text-center">Create your DevConnector account</p>
+            <form noValidate onSubmit={this.onSubmit}>
+              <TextFieldGroup
+                placeholder="Name"
+                name="username"
+                value={this.state.username}
+                onChange={this.onChange}
+                error={errors.username}
+              />
+              <TextFieldGroup
+                placeholder="Email Address"
+                name="email"
+                type="email"
+                value={this.state.email}
+                onChange={this.onChange}
+                error={errors.email}
+              />
+              <TextFieldGroup
+                placeholder="Password"
+                name="password"
+                type="password"
+                value={this.state.password}
+                onChange={this.onChange}
+                error={errors.password}
+              />
+              <TextFieldGroup
+                placeholder="Confirm Password"
+                name="password_confirmation"
+                type="password"
+                value={this.state.password_confirmation}
+                onChange={this.onChange}
+                error={errors.password_confirmation}
+              />
+              <input type="submit" className="btn btn-info btn-block mt-4" />
+            </form>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="register">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Sign Up</h1>
-              <p className="lead text-center">
-                Create your DevConnector account
-              </p>
-              <form noValidate onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                  placeholder="Name"
-                  name="username"
-                  value={this.state.username}
-                  onChange={this.onChange}
-                  error={errors.username}
-                />
-                <TextFieldGroup
-                  placeholder="Email Address"
-                  name="email"
-                  type="email"
-                  value={this.state.email}
-                  onChange={this.onChange}
-                  error={errors.email}
-                />
-                <TextFieldGroup
-                  placeholder="Password"
-                  name="password"
-                  type="password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                  error={errors.password}
-                />
-                <TextFieldGroup
-                  placeholder="Confirm Password"
-                  name="password_confirmation"
-                  type="password"
-                  value={this.state.password_confirmation}
-                  onChange={this.onChange}
-                  error={errors.password_confirmation}
-                />
-                <input type="submit" className="btn btn-info btn-block mt-4" />
-              </form>
-            </div>
-          </div>
-        </div>
+        <div className="container">{registrationContent}</div>
       </div>
     );
   }

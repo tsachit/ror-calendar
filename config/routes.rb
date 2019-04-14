@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, param: :email, :except => [:create]
       post '/auth/login', to: 'users#login'
       post '/auth/register', to: 'users#register'
+      get '/auth/confirmation/:registration_token', to: 'users#confirm_registration'
       resources :schedules, path: :schedules do
         collection do
           get ':token/see-invitation', controller: :schedules, action: :seeInvitation 
