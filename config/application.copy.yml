@@ -3,7 +3,17 @@ DB_NAME:
 DB_USERNAME: 
 DB_PASSWORD: 
 
+# frontend url(most probably http://localhost:3000)
+SITE_URL: 
+
+SENDGRID_APINAME:
+SENDGRID_APIKEY:
+
 production:
   DB_HOST: 
   DB_NAME: 
   DB_USERNAME: 
+
+  SITE_URL:
+  SENDGRID_APINAME:
+  SENDGRID_APIKEY:
