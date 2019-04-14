@@ -7,7 +7,8 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   AUTH_LOADING,
-  AUTH_LOADED
+  AUTH_LOADED,
+  SUCCESS_NOTIFICATION
 } from "./types";
 
 // Register User
@@ -18,6 +19,11 @@ export const registerUser = (userData, history) => dispatch => {
     .then(res => {
       dispatch(stopAuthLoading());
       history.push("/login");
+      dispatch({
+        type: SUCCESS_NOTIFICATION,
+        payload:
+          "Please confirm your account from your email to complete this registration."
+      });
     })
     .catch(err => {
       dispatch(stopAuthLoading());
@@ -29,10 +35,17 @@ export const registerUser = (userData, history) => dispatch => {
 };
 
 // Confirm Register User
-export const confirmRegistration = (registrationToken, history) => {
+export const confirmRegistration = (registrationToken, history) => dispatch => {
   axios
     .get(`${apiVersionURI}/auth/confirmation/${registrationToken}`)
-    .then(res => history.push("/login"))
+    .then(res => {
+      history.push("/login");
+      dispatch({
+        type: SUCCESS_NOTIFICATION,
+        payload:
+          "User confirmation successful. You can now login to the system."
+      });
+    })
     .catch(err => history.push("/not-found"));
 };
 

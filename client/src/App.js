@@ -11,6 +11,7 @@ import PrivateRoute from "../src/components/common/PrivateRoute";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import Notification from "./components/layout/Notification";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Confirmation from "./components/auth/Confirmation";
@@ -19,6 +20,7 @@ import Event from "./components/event/Event";
 import ViewEvent from "./components/event/ViewEvent";
 import NotFound from "./components/not-found/NotFound";
 
+import "react-notifications-component/dist/theme.css";
 import "./App.css";
 
 // Check for token
@@ -48,6 +50,7 @@ class App extends Component {
           <div className="App">
             <Navbar />
             <div className="body-container container">
+              <Notification />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route
