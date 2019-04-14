@@ -32,4 +32,8 @@ class ApplicationController < ActionController::API
     end
     render status: :bad_request, json: errors
   end
+
+  def fallback_index_html
+    render file: Rails.root.join('public', 'index.html')
+  end
 end

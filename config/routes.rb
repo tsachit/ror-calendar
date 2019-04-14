@@ -19,5 +19,5 @@ Rails.application.routes.draw do
       end
     end
   end
-  get '/*a', to: 'application#not_found'
+  get '/*a', to: "application#fallback_index_html"
 end
