@@ -15,7 +15,7 @@ Bundler version 1.17.2 <br />
 - Fill the given environment variables
 - Run command "rails db:migrate"
 - Run command "rake start".
-- Frontend uses port 3000 and api usees 5000, so if they're not available in your computer and if you have to change it. Update in Procfile.dev and client/package.json proxy value.
+- Frontend uses port 3000 and api uses 5000, so if they're not available in your computer and if you have to change it. Update in Procfile.dev and client/package.json proxy value.
 
 ### App Description
 

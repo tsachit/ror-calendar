@@ -1,5 +1,7 @@
 import moment from "moment";
 
+export const apiVersionURI = "/api/v1";
+
 export const datetimeSaveFormat = "YYYY-MM-DD HH:mm:ss";
 export const datepickerDisplayFormat = "yyyy-MM-dd h:mm aa";
 export const datepickerDisplayFormatEquivalentForDatetime = "YYYY-MM-DD h:mm a";

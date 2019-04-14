@@ -1,11 +1,12 @@
 import axios from "axios";
+import { apiVersionURI } from "../utils/helper";
 
 import { GET_GUESTS, GET_ERRORS } from "./types";
 
 // Get all Guests
 export const getGuests = scheduleID => dispatch => {
   axios
-    .get(`/schedules/${scheduleID}/guests`)
+    .get(`${apiVersionURI}/schedules/${scheduleID}/guests`)
     .then(res =>
       dispatch({
         type: GET_GUESTS,
@@ -27,7 +28,7 @@ export const addGuest = (
   addGuestToList
 ) => dispatch => {
   axios
-    .post(`/schedules/${scheduleID}/invite`, invitationData)
+    .post(`${apiVersionURI}/schedules/${scheduleID}/invite`, invitationData)
     .then(res => addGuestToList(res.data))
     .catch(err =>
       dispatch({

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { apiVersionURI } from "../utils/helper";
 
 import {
   GET_ERRORS,
@@ -12,7 +13,7 @@ import {
 export const getSchedules = () => dispatch => {
   dispatch(setScheduleLoading());
   axios
-    .get("/schedules")
+    .get(`${apiVersionURI}/schedules`)
     .then(res =>
       dispatch({
         type: GET_SCHEDULES,
@@ -30,7 +31,7 @@ export const getSchedules = () => dispatch => {
 // Get Schedule
 export const getSchedule = (id, history = false) => dispatch => {
   dispatch(clearErrors());
-  let url = `/schedules/${id}`;
+  let url = `${apiVersionURI}/schedules/${id}`;
   // to access edit page
   if (history) {
     url += "/edit";
@@ -62,7 +63,7 @@ export const createSchedule = (
   closePopupCallback
 ) => dispatch => {
   axios
-    .post("/schedules", scheduleData)
+    .post(`${apiVersionURI}/schedules`, scheduleData)
     .then(res => closePopupCallback(addEventCallback(res.data)))
     .catch(err =>
       dispatch({
@@ -75,7 +76,7 @@ export const createSchedule = (
 // Update Schedule
 export const updateSchedule = (id, scheduleData, history) => dispatch => {
   axios
-    .put(`/schedules/${id}`, scheduleData)
+    .put(`${apiVersionURI}/schedules/${id}`, scheduleData)
     .then(res => history.push("/"))
     .catch(err =>
       dispatch({
@@ -88,7 +89,7 @@ export const updateSchedule = (id, scheduleData, history) => dispatch => {
 // Delete Schedule
 export const deleteSchedule = (id, history) => dispatch => {
   axios
-    .delete(`/schedules/${id}`)
+    .delete(`${apiVersionURI}/schedules/${id}`)
     .then(res => history.push("/"))
     .catch(err =>
       dispatch({
@@ -102,7 +103,7 @@ export const deleteSchedule = (id, history) => dispatch => {
 export const getScheduleFromToken = (token, history) => dispatch => {
   dispatch(setScheduleLoading());
   axios
-    .get(`/schedules/${token}/see-invitation`)
+    .get(`${apiVersionURI}/schedules/${token}/see-invitation`)
     .then(res =>
       dispatch({
         type: GET_SCHEDULE,
@@ -125,7 +126,7 @@ export const getScheduleFromToken = (token, history) => dispatch => {
 export const respondToInvitation = (token, action, history) => dispatch => {
   dispatch(setScheduleLoading());
   axios
-    .put(`/schedules/${token}/invitation/${action}`)
+    .put(`${apiVersionURI}/schedules/${token}/invitation/${action}`)
     .then(res => history.push(`/register`))
     .catch(err =>
       dispatch({

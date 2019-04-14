@@ -1,6 +1,7 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import { apiVersionURI } from "../utils/helper";
 
 import {
   GET_ERRORS,
@@ -13,7 +14,7 @@ import {
 export const registerUser = (userData, history) => dispatch => {
   dispatch(setAuthLoading());
   axios
-    .post("/auth/register", userData)
+    .post(`${apiVersionURI}/auth/register`, userData)
     .then(res => {
       dispatch(stopAuthLoading());
       history.push("/login");
@@ -30,7 +31,7 @@ export const registerUser = (userData, history) => dispatch => {
 // Confirm Register User
 export const confirmRegistration = (registrationToken, history) => {
   axios
-    .get(`/auth/confirmation/${registrationToken}`)
+    .get(`${apiVersionURI}/auth/confirmation/${registrationToken}`)
     .then(res => history.push("/login"))
     .catch(err => history.push("/not-found"));
 };
@@ -38,7 +39,7 @@ export const confirmRegistration = (registrationToken, history) => {
 // Login User
 export const loginUser = userData => dispatch => {
   axios
-    .post("/auth/login", userData)
+    .post(`${apiVersionURI}/auth/login`, userData)
     .then(res => {
       // Save to localStorage
       const { token } = res.data;
