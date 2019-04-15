@@ -53,11 +53,7 @@ class Notification extends Component {
     if (isAuthenticated) {
       actionCableContent = (
         <ActionCableConsumer
-          channel={`activity_channel-${this.props.auth.user.id}`}
-          onConnected={console.log("onConnected")}
-          onDisconnected={console.log("onDisconnected")}
-          onInitialized={console.log("onInitialized")}
-          onRejected={console.log("onRejected")}
+          channel={{ channel: "ActivityChannel", id: this.props.auth.user.id }}
           onReceived={this.handleReceived}
         >
           <ReactNotification ref={this.notificationDOMRef} />
