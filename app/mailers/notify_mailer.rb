@@ -19,9 +19,9 @@ class NotifyMailer < ApplicationMailer
     @responder = @invitation.email
     @inviter = @invitation.schedule.user.email
 
-    @custom_message = "Unfortunately the #{responder} has rejected your invitation to the following event"
+    @custom_message = "Unfortunately the #{@responder} has rejected your invitation to the following event"
     if(@invitation['status'] == 1)
-      @custom_message = "Hooray! the #{responder} has accepted your invitation to the following event"
+      @custom_message = "Hooray! the #{@responder} has accepted your invitation to the following event"
     end
     
     mail(to:@inviter, subject: 'Response to Calendar Invitation Email')
