@@ -6,7 +6,8 @@ import {
   CLEAR_ERRORS,
   GET_SCHEDULE,
   GET_SCHEDULES,
-  SCHEDULES_LOADING
+  SCHEDULES_LOADING,
+  SUCCESS_NOTIFICATION
 } from "./types";
 
 // Get all Schedules
@@ -127,7 +128,14 @@ export const respondToInvitation = (token, action, history) => dispatch => {
   dispatch(setScheduleLoading());
   axios
     .put(`${apiVersionURI}/schedules/${token}/invitation/${action}`)
-    .then(res => history.push(`/register`))
+    .then(res => {
+      history.push(`/register`);
+      dispatch({
+        type: SUCCESS_NOTIFICATION,
+        payload:
+          "You have successfully responded to the event. You can also connect with our system."
+      });
+    })
     .catch(err =>
       dispatch({
         type: GET_SCHEDULE,
