@@ -1,6 +1,8 @@
 import moment from "moment";
 
 export const apiVersionURI = "/api/v1";
+export const apiRoot = `http://localhost:5000${apiVersionURI}`;
+export const apiWSRoot = `ws://localhost:5000${apiVersionURI}/cable`;
 
 export const datetimeSaveFormat = "YYYY-MM-DD HH:mm:ss";
 export const datepickerDisplayFormat = "yyyy-MM-dd h:mm aa";

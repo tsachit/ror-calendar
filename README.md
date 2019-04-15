@@ -35,7 +35,7 @@ Bundler version 1.17.2 <br />
      - [x] delete her/his schedule
      - [x] invite people to that schedule through email
      - [x] see who accepted/rejected the invitation
-     - [ ] set a notification for any schedule, in-app notification is mandatory, you are free to take it further with email notification/push information
+     - [x] set a notification for any schedule, in-app notification is mandatory, you are free to take it further with email notification/push information
 
    - As a non-app user, one should be able to
      - [x] receive an invitation for schedule through email

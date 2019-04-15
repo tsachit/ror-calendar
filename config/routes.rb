@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           put ':token/invitation/:response', controller: :invitations, action: :respond 
         end
       end
+      mount ActionCable.server => '/cable'
     end
   end
   get '/*a', to: "application#fallback_index_html"

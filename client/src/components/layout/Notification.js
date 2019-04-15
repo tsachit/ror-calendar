@@ -2,22 +2,33 @@ import React, { Component } from "react";
 import ReactNotification from "react-notifications-component";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { ActionCableConsumer } from "react-actioncable-provider";
 
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.notificationDOMRef = React.createRef();
 
-    const notification = {
+    this.handleReceived = this.handleReceived.bind(this);
+    this.state = {
       display: false,
       message: "",
       type: "info"
     };
   }
 
+  handleReceived(message) {
+    console.log("i rea ceived some message loud anc dlear", message);
+    this.setState({ message: message });
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.notification) {
-      this.setState({ notification: nextProps.notification });
+      this.setState({
+        message: nextProps.notification.message,
+        display: nextProps.notification.display,
+        type: nextProps.notification.type
+      });
     }
 
     if (nextProps.notification.display) {
@@ -35,15 +46,30 @@ class Notification extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <ReactNotification ref={this.notificationDOMRef} />
-      </div>
+    const { isAuthenticated } = this.props.auth;
+    let actionCableContent = (
+      <ReactNotification ref={this.notificationDOMRef} />
     );
+    if (isAuthenticated) {
+      actionCableContent = (
+        <ActionCableConsumer
+          channel={`activity_channel-${this.props.auth.user.id}`}
+          onConnected={console.log("onConnected")}
+          onDisconnected={console.log("onDisconnected")}
+          onInitialized={console.log("onInitialized")}
+          onRejected={console.log("onRejected")}
+          onReceived={this.handleReceived}
+        >
+          <ReactNotification ref={this.notificationDOMRef} />
+        </ActionCableConsumer>
+      );
+    }
+    return <div>{actionCableContent}</div>;
   }
 }
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   notification: state.notification
 });
 

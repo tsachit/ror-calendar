@@ -11,7 +11,7 @@ class EventBroadcastJob < ApplicationJob
       end
     
       message = "#{@invitation.email} has #{statusType} to your invitation for #{@invitation.schedule.title}"
-      ActionCable.server.broadcast "activity_channel-#{@invitation.schedule.user_id}", json: { message: message }
+      ActionCable.server.broadcast "activity_channel-#{@invitation.schedule.user_id}", message: message
     end
   end
   
