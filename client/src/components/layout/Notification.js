@@ -3,6 +3,7 @@ import ReactNotification from "react-notifications-component";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { ActionCableConsumer } from "react-actioncable-provider";
+import { sendPushNotificationMessage } from "../../actions/authActions";
 
 class Notification extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Notification extends Component {
     this.notificationDOMRef = React.createRef();
 
     this.handleReceived = this.handleReceived.bind(this);
+    this.addNotification = this.addNotification.bind(this);
     this.state = {
       display: false,
       message: "",
@@ -18,8 +20,23 @@ class Notification extends Component {
   }
 
   handleReceived(message) {
-    console.log("i rea ceived some message loud anc dlear", message);
-    this.setState({ message: message });
+    this.setState({ display: true, message: message, type: "success" });
+    this.props.sendPushNotificationMessage(message);
+  }
+
+  addNotification(notification) {
+    if (notification.display) {
+      this.notificationDOMRef.current.addNotification({
+        message: notification.message,
+        type: notification.type,
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: { duration: 2000 },
+        dismissable: { click: true }
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,36 +48,26 @@ class Notification extends Component {
       });
     }
 
-    if (nextProps.notification.display) {
-      this.notificationDOMRef.current.addNotification({
-        message: nextProps.notification.message,
-        type: nextProps.notification.type,
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animated", "fadeIn"],
-        animationOut: ["animated", "fadeOut"],
-        dismiss: { duration: 2000 },
-        dismissable: { click: true }
-      });
-    }
+    this.addNotification(nextProps.notification);
   }
 
   render() {
     const { isAuthenticated } = this.props.auth;
-    let actionCableContent = (
-      <ReactNotification ref={this.notificationDOMRef} />
-    );
+    let actionCableContent = "";
     if (isAuthenticated) {
       actionCableContent = (
         <ActionCableConsumer
           channel={{ channel: "ActivityChannel", id: this.props.auth.user.id }}
           onReceived={this.handleReceived}
-        >
-          <ReactNotification ref={this.notificationDOMRef} />
-        </ActionCableConsumer>
+        />
       );
     }
-    return <div>{actionCableContent}</div>;
+    return (
+      <div>
+        {actionCableContent}
+        <ReactNotification ref={this.notificationDOMRef} />
+      </div>
+    );
   }
 }
 
@@ -71,5 +78,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { sendPushNotificationMessage }
 )(withRouter(Notification));

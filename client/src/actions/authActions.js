@@ -91,6 +91,13 @@ export const logoutUser = () => dispatch => {
   dispatch(setCurrentUser({}));
 };
 
+export const sendPushNotificationMessage = message => dispatch => {
+  dispatch({
+    type: SUCCESS_NOTIFICATION,
+    payload: message
+  });
+};
+
 // Set loading state
 export const setAuthLoading = () => {
   return {
