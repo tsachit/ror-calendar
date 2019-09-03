@@ -1,7 +1,7 @@
 class Api::V1::SchedulesController < ApplicationController
   before_action :authorize_request, except: [:seeInvitation]
   before_action :check_user_schedule_access, only: [:update, :destroy]
-  before_action :get_schedule, only: [:show]
+  before_action :get_schedule, only: [:show, :update, :destroy]
 
   # GET /schedules
   def index
@@ -37,7 +37,7 @@ class Api::V1::SchedulesController < ApplicationController
 
   # DELETE /schedules/:id
   def destroy
-    if(@schedule.destroy)
+    if(@schedule && @schedule.destroy)
       render json: {success: true}, status: :ok
     else 
       validation_error(@schedule)
