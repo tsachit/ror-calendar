@@ -1,6 +1,6 @@
 # Calendar App
 
-This is a calendar app created with Ruby on Rails and React JS
+This is a calendar app created with Ruby on Rails and React JS. Check out the [demo](https://ror-calendar.herokuapp.com) for yourself.
 
 ### App Dependency
 
@@ -13,10 +13,25 @@ Bundler version 1.17.2 <br />
 
 - Copy config/application.copy.yml and paste as config/application.yml
 - Fill the given environment variables
-- Run command "rails db:migrate"
-- Run command "rake start".
+- Run command to migrate:
+   ```bash
+   rails db:migrate
+   ```
+- Run command to start ror:
+   ```bash
+   bin/rails s -p 5000
+   ```
 - Frontend uses port 3000 and api uses 5000, so if they're not available in your computer and if you have to change it. Update in Procfile.dev and client/package.json proxy value.
 - If you happen to change port of api, also update in helpers for in app notification.
+- Run command to start react:
+   ```bash
+   npm start
+   ```
+   or, <br/>
+   Run command to build the react app
+   ```bash
+   npm run heroku-postbuild
+   ```
 
 ### App Description
 
